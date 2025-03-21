@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mksoftwaresolutions.image_to_pdf_converter.ui.theme.Image_to_pdf_converterTheme
+import com.mksoftwaresolutions.image_to_pdf_converter.viewmodels.CameraPreviewViewModel
 import com.mksoftwaresolutions.image_to_pdf_converter.viewmodels.ImageToPdfViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -26,10 +27,11 @@ class ImageToPdfActivity: ComponentActivity() {
         setContent {
             Image_to_pdf_converterTheme {
                 val imageToPdfViewModel:ImageToPdfViewModel by viewModels()
+                val cameraPreviewViewModel:CameraPreviewViewModel by viewModels()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    ImageToPdfPage(innerPadding,imageToPdfViewModel)
+                    ImageToPdfPage(innerPadding,imageToPdfViewModel, cameraPreviewViewModel)
                 }
             }
         }

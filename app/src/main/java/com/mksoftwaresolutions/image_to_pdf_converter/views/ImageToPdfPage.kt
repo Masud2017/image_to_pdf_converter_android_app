@@ -1,6 +1,7 @@
 package com.mksoftwaresolutions.image_to_pdf_converter.views
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,6 +36,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -43,14 +51,22 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
+import com.mksoftwaresolutions.image_to_pdf_converter.viewmodels.CameraPreviewViewModel
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun ImageToPdfPage(innerPadding:PaddingValues, imageToPdfViewModel: ImageToPdfViewModel) {
+fun ImageToPdfPage(innerPadding:PaddingValues, imageToPdfViewModel: ImageToPdfViewModel,cameraPreviewViewModel: CameraPreviewViewModel) {
     var pdfGenerationDone:MutableState<Boolean>  = remember {
+        mutableStateOf(false)
+    }
+    var shouldCameraOpen:MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    }
+    var doesCameraHasPermission:MutableState<Boolean> = remember {
         mutableStateOf(false)
     }
     rememberCoroutineScope().launch {
@@ -61,72 +77,67 @@ fun ImageToPdfPage(innerPadding:PaddingValues, imageToPdfViewModel: ImageToPdfVi
     }
 
     val context = LocalContext.current
+    val lifeCycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
 
-    Surface(modifier= Modifier.padding(innerPadding)) {
-        Column(modifier = Modifier.fillMaxSize()
-            .background(color = Color.Red)
-            .padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(modifier = Modifier.border(BorderStroke(8.dp, color = Color.White)).clip(
-            RoundedCornerShape(20.dp)
-            ).padding(5.dp).
-            height(250.dp).
-            fillMaxWidth().
-                    clickable {
-                        Dexter.withContext(context).withPermissions(android.Manifest.permission.CAMERA)
-                            .withListener(object: PermissionListener, MultiplePermissionsListener {
-                                override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                                    TODO("Not yet implemented")
-                                }
 
-                                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                                    TODO("Not yet implemented")
-                                }
+    if (doesCameraHasPermission.value) {
+        CameraPreviewContent(lifecycleOwner = lifeCycleOwner, modifier = Modifier.fillMaxSize(), viewModel = cameraPreviewViewModel)
+    } else {
 
-                                override fun onPermissionRationaleShouldBeShown(
-                                    p0: PermissionRequest?,
-                                    p1: PermissionToken?
-                                ) {
-                                    TODO("Not yet implemented")
-                                }
+        Surface(modifier= Modifier.padding(innerPadding)) {
+            Column(modifier = Modifier.fillMaxSize()
+                .background(color = Color.Red)
+                .padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(modifier = Modifier.border(BorderStroke(8.dp, color = Color.White)).clip(
+                    RoundedCornerShape(20.dp)
+                ).padding(5.dp).
+                height(250.dp).
+                fillMaxWidth().
+                clickable {
+                    shouldCameraOpen.value = true
 
-                                override fun onPermissionsChecked(p0: MultiplePermissionsReport?) {
-                                    TODO("Not yet implemented")
-                                }
-
-                                override fun onPermissionRationaleShouldBeShown(
-                                    p0: MutableList<PermissionRequest>?,
-                                    p1: PermissionToken?
-                                ) {
-                                    TODO("Not yet implemented")
-                                }
-
-                            }).check()
-                    }
-                , contentAlignment = Alignment.Center) {
-                Image(painter = painterResource(R.drawable.image_ic), contentDescription = "Can not find any data named image_ic",Modifier.size(150.dp),
-                    colorFilter = ColorFilter.tint(color = Color.White))
-            }
-
-            Spacer(modifier = Modifier.size(25.dp))
-            AddedImageRow()
-
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                Column {
-                    if (pdfGenerationDone.value) {
-                        ElevatedButton(onClick = {}, modifier = Modifier.fillMaxWidth()) {
-                            Text("View")
+                    if (cameraPermissionState.status.isGranted) {
+                        doesCameraHasPermission.value = true
+                    } else {
+                        if (cameraPermissionState.status.shouldShowRationale) {
+                            Toast.makeText(context, "Yo you should better let me see you", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(context, "Yo you should better let me see you", Toast.LENGTH_LONG).show()
                         }
-                    }
-                    ElevatedButton(onClick = {
-                        imageToPdfViewModel.finishGeneration()
-                    }, modifier = Modifier.fillMaxWidth()) {
-                        Text("Generate")
+
+                        cameraPermissionState.launchPermissionRequest()
                     }
                 }
-            }
+                    , contentAlignment = Alignment.Center) {
+                    Image(painter = painterResource(R.drawable.image_ic), contentDescription = "Can not find any data named image_ic",Modifier.size(150.dp),
+                        colorFilter = ColorFilter.tint(color = Color.White))
+                }
 
+                Spacer(modifier = Modifier.size(25.dp))
+                AddedImageRow()
+
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+                    Column {
+                        if (pdfGenerationDone.value) {
+                            ElevatedButton(onClick = {}, modifier = Modifier.fillMaxWidth()) {
+                                Text("View")
+                            }
+                        }
+                        ElevatedButton(onClick = {
+                            imageToPdfViewModel.finishGeneration()
+                        }, modifier = Modifier.fillMaxWidth()) {
+                            Text("Generate")
+                        }
+                    }
+                }
+
+            }
         }
     }
+
+
+
 }
 
 @Composable
