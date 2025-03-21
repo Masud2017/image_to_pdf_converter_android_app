@@ -1,7 +1,9 @@
 package com.mksoftwaresolutions.image_to_pdf_converter.views
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.widget.Toast
+import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,7 +50,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun ImageToPdfPage(innerPadding:PaddingValues, imageToPdfViewModel: ImageToPdfViewModel,cameraPreviewViewModel: CameraPreviewViewModel) {
+fun ImageToPdfPage(innerPadding:PaddingValues,
+                   imageToPdfViewModel: ImageToPdfViewModel,
+                   cameraPreviewViewModel: CameraPreviewViewModel,
+                   cameraController:LifecycleCameraController) {
     var pdfGenerationDone:MutableState<Boolean>  = remember {
         mutableStateOf(false)
     }
@@ -58,6 +63,8 @@ fun ImageToPdfPage(innerPadding:PaddingValues, imageToPdfViewModel: ImageToPdfVi
     var doesCameraHasPermission:MutableState<Boolean> = remember {
         mutableStateOf(false)
     }
+    var imageList:MutableList<Bitmap> = mutableListOf()
+
     rememberCoroutineScope().launch {
         imageToPdfViewModel.pdfGenerationDone.collectLatest {
             vall ->
@@ -70,8 +77,17 @@ fun ImageToPdfPage(innerPadding:PaddingValues, imageToPdfViewModel: ImageToPdfVi
     val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
 
 
+    if (imageList.size > 0) {
+        doesCameraHasPermission.value = false
+        shouldCameraOpen.value = false
+    }
+
     if (doesCameraHasPermission.value) {
-        CameraPreviewContent(lifecycleOwner = lifeCycleOwner, modifier = Modifier.fillMaxSize(), viewModel = cameraPreviewViewModel)
+        CameraPreviewContent(lifecycleOwner = lifeCycleOwner,
+            modifier = Modifier.fillMaxSize(),
+            viewModel = cameraPreviewViewModel,
+            cameraController = cameraController,
+            capturedImageList = imageList)
     } else {
 
         Surface(modifier= Modifier.padding(innerPadding)) {

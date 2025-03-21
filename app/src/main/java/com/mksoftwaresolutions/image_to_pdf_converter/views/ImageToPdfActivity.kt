@@ -6,11 +6,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.mksoftwaresolutions.image_to_pdf_converter.ui.theme.Image_to_pdf_converterTheme
@@ -28,10 +30,15 @@ class ImageToPdfActivity: ComponentActivity() {
             Image_to_pdf_converterTheme {
                 val imageToPdfViewModel:ImageToPdfViewModel by viewModels()
                 val cameraPreviewViewModel:CameraPreviewViewModel by viewModels()
+                val cameraController:LifecycleCameraController = LifecycleCameraController(
+                    LocalContext.current)
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    ImageToPdfPage(innerPadding,imageToPdfViewModel, cameraPreviewViewModel)
+                    ImageToPdfPage(innerPadding
+                        ,imageToPdfViewModel,
+                        cameraPreviewViewModel,
+                        cameraController)
                 }
             }
         }
