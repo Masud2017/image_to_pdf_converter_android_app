@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,15 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.karumi.dexter.listener.single.PermissionListener
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -50,13 +60,49 @@ fun ImageToPdfPage(innerPadding:PaddingValues, imageToPdfViewModel: ImageToPdfVi
         }
     }
 
+    val context = LocalContext.current
+
     Surface(modifier= Modifier.padding(innerPadding)) {
         Column(modifier = Modifier.fillMaxSize()
             .background(color = Color.Red)
             .padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(modifier = Modifier.border(BorderStroke(8.dp, color = Color.White)).clip(
             RoundedCornerShape(20.dp)
-            ).padding(5.dp).height(250.dp).fillMaxWidth(), contentAlignment = Alignment.Center) {
+            ).padding(5.dp).
+            height(250.dp).
+            fillMaxWidth().
+                    clickable {
+                        Dexter.withContext(context).withPermissions(android.Manifest.permission.CAMERA)
+                            .withListener(object: PermissionListener, MultiplePermissionsListener {
+                                override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                                    TODO("Not yet implemented")
+                                }
+
+                                override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                                    TODO("Not yet implemented")
+                                }
+
+                                override fun onPermissionRationaleShouldBeShown(
+                                    p0: PermissionRequest?,
+                                    p1: PermissionToken?
+                                ) {
+                                    TODO("Not yet implemented")
+                                }
+
+                                override fun onPermissionsChecked(p0: MultiplePermissionsReport?) {
+                                    TODO("Not yet implemented")
+                                }
+
+                                override fun onPermissionRationaleShouldBeShown(
+                                    p0: MutableList<PermissionRequest>?,
+                                    p1: PermissionToken?
+                                ) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            }).check()
+                    }
+                , contentAlignment = Alignment.Center) {
                 Image(painter = painterResource(R.drawable.image_ic), contentDescription = "Can not find any data named image_ic",Modifier.size(150.dp),
                     colorFilter = ColorFilter.tint(color = Color.White))
             }

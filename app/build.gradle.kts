@@ -58,6 +58,8 @@ dependencies {
     // camerax dependencies section ended
 
 
+    implementation ("com.karumi:dexter:6.2.3")
+
 
 //    implementation ("com.github.kerolsafififawzy:Image-To-PdfConverter:1.0.3")
     implementation(libs.androidx.core.ktx)
