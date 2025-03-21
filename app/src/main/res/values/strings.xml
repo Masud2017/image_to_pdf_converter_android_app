@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">image_to_pdf_converter</string>
+    <string name = "app_title">Image to Pdf Converter</string>
+</resources>
