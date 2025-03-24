@@ -74,7 +74,7 @@ fun HomePage(innerPaddingParent:PaddingValues) {
                 var activityIntent = Intent(context, ImageToPdfActivity::class.java)
                 context.startActivity(activityIntent)
             }, colors = ButtonColors(containerColor = Color.White, contentColor = Color.Black, disabledContentColor = Color.White, disabledContainerColor = Color.Gray)) {
-                Text("Image to Pdf")
+                Text("Get started")
             }
         }
     }

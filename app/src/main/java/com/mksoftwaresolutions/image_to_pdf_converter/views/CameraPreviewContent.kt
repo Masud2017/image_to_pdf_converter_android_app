@@ -2,6 +2,7 @@ package com.mksoftwaresolutions.image_to_pdf_converter.views
 
 import android.graphics.Bitmap
 import android.media.ImageWriter
+import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.ExperimentalGetImage
@@ -30,12 +31,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorProducer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mksoftwaresolutions.image_to_pdf_converter.R
 import com.mksoftwaresolutions.image_to_pdf_converter.viewmodels.CameraPreviewViewModel
 
 @Composable
@@ -72,6 +77,7 @@ fun CameraPreviewContent(
                             override fun onCaptureSuccess(image: ImageProxy) {
                                 super.onCaptureSuccess(image)
                                 capturedImageList.add(image.toBitmap())
+                                Toast.makeText(context, "Image capture succeeded", Toast.LENGTH_LONG).show()
                                 println("New image has been saved ${image.image.height}")
 
                             }
@@ -90,9 +96,9 @@ fun CameraPreviewContent(
 
                         })
                 }) {
-                    Icon(imageVector = Icons.Rounded.AccountCircle,
-                        contentDescription = "AccountCircle",
-                        modifier = Modifier.background(color = Color.White)
+                    Icon(painter = painterResource(R.drawable.ic_camera_icon),
+                        tint = Color.White,
+                        contentDescription = "camera icon is not possible to show.",
                         )
                 }
                 IconButton(onClick = {}) {
