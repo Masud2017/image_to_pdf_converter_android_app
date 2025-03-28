@@ -150,7 +150,9 @@ fun AddedImageRow() {
     LazyRow {
         items(10) {
             Image(painter = painterResource(R.drawable.image_ic), contentDescription = "image_Ic",
-                modifier = Modifier.size(70.dp), colorFilter = ColorFilter.tint(color = Color.White))
+                modifier = Modifier.size(70.dp).clickable {
+                    // it will mutate the view model and change the data.
+                }, colorFilter = ColorFilter.tint(color = Color.White))
         }
     }
 }
