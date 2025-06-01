@@ -70,6 +70,7 @@ fun CameraPreviewContent(
                         object: OnImageCapturedCallback() {
                             override fun onCaptureStarted() {
                                 super.onCaptureStarted()
+                                println("Image captureing has been started")
                             }
 
                             @androidx.camera.core.ExperimentalGetImage
