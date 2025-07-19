@@ -38,7 +38,7 @@ fun GeneratedPdfPage(innerPadding: PaddingValues) {
     Surface(modifier = Modifier.padding(innerPadding).background(color = Color.Red).fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()
             .background(color = Color.Red).padding(5.dp)) {
-                LazyVerticalStaggeredGrid (modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(15.dp), columns = StaggeredGridCells.Adaptive(150.dp)) {
+                LazyVerticalStaggeredGrid (modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(15.dp), verticalItemSpacing = 15.dp, columns = StaggeredGridCells.Adaptive(150.dp)) {
                     items(10) {
                         ElevatedCard(onClick = {},
                             modifier = Modifier.height(250.dp).width(150.dp)) {

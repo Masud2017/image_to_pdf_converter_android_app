@@ -9,6 +9,7 @@ import java.io.File
  * */
 class DocumentHandler {
     val CREATE_FILE = 1
+    val baseUrl = "/image_to_pdf_converter"
 
     fun createFile(fileData: File) {
 
@@ -16,4 +17,11 @@ class DocumentHandler {
     fun createFile(data:String) {
 
     }
+
+    fun getPdfFileList():Array<File> {
+        return emptyArray()
+    }
+
+    fun deletePdfFileByName(fileName:String) {}
+    fun getPdfFileByName(fileName:String){}
 }
