@@ -1,8 +1,11 @@
 package com.mksoftwaresolutions.image_to_pdf_converter.views
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -20,6 +23,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,6 +44,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -134,6 +141,22 @@ fun ImageToPdfPage(innerPadding:PaddingValues,
                         }, modifier = Modifier.fillMaxWidth()) {
                             Text("Generate")
                         }
+
+                        ElevatedButton(onClick =  {
+                            var alertBuilder:AlertDialog.Builder = AlertDialog.Builder(
+                                context
+                            )
+
+                            alertBuilder.setTitle("Plesae choose and option:")
+                            alertBuilder.setIcon(R.drawable.ic_camera_icon)
+                            alertBuilder.setMessage("YOYO")
+
+                            var alertDialog = alertBuilder.create()
+                            alertDialog.show()
+                        }, modifier = Modifier.fillMaxWidth()) {
+                            Text("Pick image")
+                        }
+
                     }
                 }
 
