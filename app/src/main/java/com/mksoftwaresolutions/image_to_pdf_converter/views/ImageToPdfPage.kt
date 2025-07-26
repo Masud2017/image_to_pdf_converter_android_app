@@ -9,6 +9,7 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,7 +22,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountBox
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +42,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
@@ -137,14 +146,46 @@ fun ImageToPdfPage(innerPadding:PaddingValues,
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                Surface(shadowElevation = 5.dp) {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Box(modifier = Modifier.height(100.dp).width(30.dp)) {
-                            Image(painter = painterResource(R.drawable.ic_camera_icon), contentDescription = "ic_camera_icon")
-                            Text("Image To Pdf Converter")
+
+                Row(modifier = Modifier.fillMaxWidth().height(300.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Card(elevation = CardDefaults.cardElevation(10.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
+                        Box(modifier = Modifier.height(100.dp).width(100.dp).padding(5.dp)) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxSize()) {
+                                Image(painter = painterResource(R.drawable.ic_camera_icon), contentDescription = "ic_camera_icon", modifier = Modifier.height(40.dp).width(40.dp))
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Text("Image To Pdf Converter", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
+
+                    Card(elevation = CardDefaults.cardElevation(10.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
+                        Box(modifier = Modifier.height(100.dp).width(100.dp).padding(5.dp)) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally,modifier = Modifier.fillMaxSize()) {
+                                Image(painter = painterResource(R.drawable.ic_camera_icon), contentDescription = "ic_camera_icon", modifier = Modifier.height(40.dp).width(40.dp))
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Text("Image To Pdf Converter", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+
                 }
+
+
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    // heading
+                    Surface(shadowElevation = 5.dp) {
+                        Row(modifier = Modifier.fillMaxWidth().padding(3.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Text("All", fontWeight = FontWeight.Bold)
+                            IconButton(onClick = {
+                                // here we have to start the maximize window activity
+                            }) {
+                                Icon(Icons.Rounded.AccountBox, contentDescription = "AccountBox")
+                            }
+                        }
+                    }
+                    // heading section ended
+                }
+
 
 
 
