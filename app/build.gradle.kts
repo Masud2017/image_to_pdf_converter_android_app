@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.activity)
+
     // CameraX core library using the camera2 implementation
     val camerax_version = "1.5.0-alpha06"
     // The following line is optional, as the core library is included indirectly by camera-camera2
@@ -66,6 +67,8 @@ dependencies {
 
 
     implementation ("com.karumi:dexter:6.2.3")
+
+    implementation("com.google.android.gms:play-services-ads:24.5.0")
 
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.compose)

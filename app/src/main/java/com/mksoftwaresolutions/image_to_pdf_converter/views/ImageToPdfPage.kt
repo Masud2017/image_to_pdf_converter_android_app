@@ -1,8 +1,8 @@
 package com.mksoftwaresolutions.image_to_pdf_converter.views
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
-import android.content.res.Resources
+import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -23,37 +23,58 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.mksoftwaresolutions.image_to_pdf_converter.R
-import com.mksoftwaresolutions.image_to_pdf_converter.viewmodels.ImageToPdfViewModel
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.OnUserEarnedRewardListener
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.mksoftwaresolutions.image_to_pdf_converter.R
 import com.mksoftwaresolutions.image_to_pdf_converter.viewmodels.CameraPreviewViewModel
-
+import com.mksoftwaresolutions.image_to_pdf_converter.viewmodels.ImageToPdfViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
+var rewardedAd:RewardedAd? = null
+fun loadRewardedAd(context:Context) {
+    RewardedAd.load(
+        context,
+        "ca-app-pub-3940256099942544/5224354917",
+        AdRequest.Builder().build(),
+        object : RewardedAdLoadCallback() {
+            override fun onAdLoaded(ad: RewardedAd) {
+                rewardedAd = ad
+            }
+
+
+
+        },
+    )
+}
+
+
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -61,7 +82,7 @@ import kotlinx.coroutines.launch
 fun ImageToPdfPage(innerPadding:PaddingValues,
                    imageToPdfViewModel: ImageToPdfViewModel,
                    cameraPreviewViewModel: CameraPreviewViewModel,
-                   cameraController:LifecycleCameraController) {
+                   cameraController:LifecycleCameraController,context:Context) {
     var pdfGenerationDone:MutableState<Boolean>  = remember {
         mutableStateOf(false)
     }
@@ -72,6 +93,12 @@ fun ImageToPdfPage(innerPadding:PaddingValues,
         mutableStateOf(false)
     }
     var imageList:MutableList<Bitmap> = mutableListOf()
+
+
+    //loading the rewarded ad
+    loadRewardedAd(context)
+    // loading the rewarded ad section finished
+
 
     rememberCoroutineScope().launch {
         imageToPdfViewModel.pdfGenerationDone.collectLatest {
@@ -100,8 +127,20 @@ fun ImageToPdfPage(innerPadding:PaddingValues,
 
         Surface(modifier= Modifier.padding(innerPadding)) {
             Column(modifier = Modifier.fillMaxSize()
-                .background(color = Color.Red)
+                .background(color = Color(0xFFFFF7F7))
                 .padding(15.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    AndroidView(factory = {
+                        ctx ->
+                        AdView(ctx).apply {
+                            setAdSize(AdSize.BANNER)
+                            adUnitId=ContextCompat.getString(ctx,R.string.banner_ad_unit_id)
+                            loadAd(AdRequest.Builder().build())
+                        }
+                    })
+
+                }
+                Spacer(modifier = Modifier.height(20.dp))
                 Box(modifier = Modifier.border(BorderStroke(8.dp, color = Color.White)).clip(
                     RoundedCornerShape(20.dp)
                 ).padding(5.dp).
@@ -138,7 +177,13 @@ fun ImageToPdfPage(innerPadding:PaddingValues,
                             }
                         }
                         ElevatedButton(onClick = {
-                            imageToPdfViewModel.finishGeneration()
+
+                            rewardedAd?.show(context as Activity, OnUserEarnedRewardListener {
+                                imageToPdfViewModel.finishGeneration()
+                            })
+
+//                            imageToPdfViewModel.finishGeneration()
+
                         }, modifier = Modifier.fillMaxWidth()) {
                             Text("Generate")
                         }
@@ -181,4 +226,3 @@ fun AddedImageRow() {
         }
     }
 }
-

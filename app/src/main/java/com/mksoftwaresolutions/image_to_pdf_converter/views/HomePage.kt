@@ -1,13 +1,9 @@
 package com.mksoftwaresolutions.image_to_pdf_converter.views
 
 import android.content.Intent
-import android.graphics.Paint.Align
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,11 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
@@ -30,10 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendModeColorFilter
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +34,7 @@ import com.mksoftwaresolutions.image_to_pdf_converter.R
 fun HomePage(innerPaddingParent:PaddingValues) {
     var context = LocalContext.current
     Scaffold { innerPadding ->
-        Column(modifier = Modifier.fillMaxSize().background(color = Color.Red).padding(innerPadding)
+        Column(modifier = Modifier.fillMaxSize().background(color = Color(0xFFFFF7F7)).padding(innerPadding)
             .padding(5.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -83,6 +73,6 @@ fun HomePage(innerPaddingParent:PaddingValues) {
 @Preview
 @Composable
 fun PrevHomePage() {
-//    HomePage()
+    HomePage(innerPaddingParent = PaddingValues(2.dp))
 }
 
