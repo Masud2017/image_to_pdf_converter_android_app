@@ -27,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -153,6 +154,7 @@ fun ImageToPdfPage(innerPadding:PaddingValues,
 
                             var alertDialog = alertBuilder.create()
                             alertDialog.show()
+
                         }, modifier = Modifier.fillMaxWidth()) {
                             Text("Pick image")
                         }
@@ -180,10 +182,3 @@ fun AddedImageRow() {
     }
 }
 
-//@Preview
-//@Composable
-//fun PrevImageToPdfPage() {
-//
-//    ImageToPdfPage(PaddingValues(0.dp),true)
-//
-//}

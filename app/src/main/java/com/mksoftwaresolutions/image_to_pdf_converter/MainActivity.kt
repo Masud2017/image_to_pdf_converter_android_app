@@ -38,19 +38,3 @@ class MainActivity : ComponentActivity() {
         return true
     }
 }
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Image_to_pdf_converterTheme {
-        Greeting("Android")
-    }
-}
