@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mksoftwaresolutions.image_to_pdf_converter.R
 
+@Deprecated(message = "This composable is no longer is being used.")
 @Composable
 fun HomePage(innerPaddingParent:PaddingValues) {
     var context = LocalContext.current

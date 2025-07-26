@@ -1,5 +1,6 @@
 package com.mksoftwaresolutions.image_to_pdf_converter
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,9 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.ads.MobileAds
 import com.mksoftwaresolutions.image_to_pdf_converter.ui.theme.Image_to_pdf_converterTheme
-import com.mksoftwaresolutions.image_to_pdf_converter.views.HomePage
+import com.mksoftwaresolutions.image_to_pdf_converter.views.ImageToPdfActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +30,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             Image_to_pdf_converterTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomePage(innerPadding)
+//                    HomePage(innerPadding)
+                    var activityIntent = Intent(LocalContext.current, ImageToPdfActivity::class.java)
+                    startActivity(activityIntent)
                 }
             }
         }

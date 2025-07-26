@@ -4,25 +4,23 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.camera.view.LifecycleCameraController
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -42,9 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -134,40 +129,24 @@ fun ImageToPdfPage(innerPadding:PaddingValues,
                         ctx ->
                         AdView(ctx).apply {
                             setAdSize(AdSize.BANNER)
-                            adUnitId=ContextCompat.getString(ctx,R.string.banner_ad_unit_id)
+                            adUnitId= ContextCompat.getString(ctx,R.string.banner_ad_unit_id)
                             loadAd(AdRequest.Builder().build())
                         }
                     })
 
                 }
+
                 Spacer(modifier = Modifier.height(20.dp))
-                Box(modifier = Modifier.border(BorderStroke(8.dp, color = Color.White)).clip(
-                    RoundedCornerShape(20.dp)
-                ).padding(5.dp).
-                height(250.dp).
-                fillMaxWidth().
-                clickable {
-                    shouldCameraOpen.value = true
-
-                    if (cameraPermissionState.status.isGranted) {
-                        doesCameraHasPermission.value = true
-                    } else {
-                        if (cameraPermissionState.status.shouldShowRationale) {
-                            Toast.makeText(context, "Yo you should better let me see you", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(context, "Yo you should better let me see you", Toast.LENGTH_LONG).show()
+                Surface(shadowElevation = 5.dp) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Box(modifier = Modifier.height(100.dp).width(30.dp)) {
+                            Image(painter = painterResource(R.drawable.ic_camera_icon), contentDescription = "ic_camera_icon")
+                            Text("Image To Pdf Converter")
                         }
-
-                        cameraPermissionState.launchPermissionRequest()
                     }
                 }
-                    , contentAlignment = Alignment.Center) {
-                    Image(painter = painterResource(R.drawable.image_ic), contentDescription = "Can not find any data named image_ic",Modifier.size(150.dp),
-                        colorFilter = ColorFilter.tint(color = Color.White))
-                }
 
-                Spacer(modifier = Modifier.size(25.dp))
-                AddedImageRow()
+
 
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                     Column {
